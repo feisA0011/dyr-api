@@ -41,12 +41,11 @@ async function updateSingleAsset(req, res, next) {
 			url: req.fields.url
 		});
 		res.json(asset);
-	} catch (error) {
+	} catch(error) {
 		console.error(error);
 		res.status(500).end();
 	}
 }
-
 
 module.exports = {
 	createSingleAsset,
