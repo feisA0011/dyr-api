@@ -41,11 +41,21 @@ async function updateSingleAsset(req, res, next) {
 			url: req.fields.url
 		});
 		res.json(asset);
-	} catch(error) {
+	} catch (error) {
 		console.error(error);
 		res.status(500).end();
 	}
 }
+(async () => {
+	let assets = await Asset.findAll();
+	for (const asset of assets) {
+		if (asset.url.includes("http://localhost:4000")) {
+			asset.update({
+				url: asset.url.replace("http://localhost:4000/", process.env.API_ENDPOINT),
+			});
+		}
+	}
+})();
 
 module.exports = {
 	createSingleAsset,
