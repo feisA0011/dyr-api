@@ -1,6 +1,17 @@
 var { Asset } = require("../models/models");
 var saveFile = require("../services/asset");
 
+(async () => {
+	let assets = await Asset.findAll();
+	for (const asset of assets) {
+		if (asset.url.includes("http://localhost:4000")) {
+			asset.update({
+				url: asset.url.replace("http://localhost:4000/", process.env.API_ENDPOINT),
+			});
+		}
+	}
+})();
+
 async function createSingleAsset(req, res, next) {
 	try {
 		let file = saveFile(req.files.file);
@@ -41,7 +52,7 @@ async function updateSingleAsset(req, res, next) {
 			url: req.fields.url
 		});
 		res.json(asset);
-	} catch(error) {
+	} catch (error) {
 		console.error(error);
 		res.status(500).end();
 	}
